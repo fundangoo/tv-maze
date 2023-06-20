@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Portal from './Portal';
 import useModalContext, { ModalContext } from '../hooks/useModalContext';
 import { PrimaryButton, SecondaryButton } from './Button';
@@ -59,7 +59,6 @@ const Modal: React.FC<React.PropsWithChildren<IModal>> & ModalComposition = ({
   children,
 }): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
-  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const onOpen = () => {
     setIsOpen(true);
@@ -73,7 +72,6 @@ const Modal: React.FC<React.PropsWithChildren<IModal>> & ModalComposition = ({
     const keyHandler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
-        buttonRef.current?.blur();
       }
     };
     document.addEventListener('keydown', keyHandler);

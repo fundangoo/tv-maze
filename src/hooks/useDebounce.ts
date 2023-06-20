@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+// RESET-CAPABLE DEBOUNCE
 function useDebounce<T>(initial: T, delay = 1000): [T, (feed: T) => void, T, () => void] {
   const [value, setValue] = useState<T>(initial);
   const [debouncedValue, setDebouncedValue] = useState<T>(initial);

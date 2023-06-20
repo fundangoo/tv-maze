@@ -10,8 +10,8 @@ type IShowSearchResult = {
 const ShowSearchResult: React.FC<IShowSearchResult> = ({ show }): JSX.Element => {
   return (
     <Link to={`details/${show.id}`} className="flex place-items-center flex-nowrap gap-5">
-      <span className="flex-shrink-0 w-full">
-        <Card imageUrl={show.image?.medium} imageAlt={show.name} />
+      <span className="w-full">
+        <Card imageUrl={show.image?.original} imageAlt={show.name} />
       </span>
     </Link>
   );

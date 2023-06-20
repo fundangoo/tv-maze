@@ -9,7 +9,7 @@ const Card: React.FC<ICard> = ({
 }): JSX.Element => {
   return (
     <figure>
-      <img src={imageUrl} alt={imageAlt} className="w-full rounded-lg" />
+      <img src={imageUrl} alt={imageAlt} className="w-full rounded-lg border border-black" />
     </figure>
   );
 };

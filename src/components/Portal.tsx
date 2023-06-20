@@ -12,6 +12,7 @@ const createPortalElement = (portalId: string): HTMLElement => {
   return portalElement;
 };
 
+// COMPONENT THAT CREATES A PORTAL AT THE DOCUMENT BODY
 const Portal: React.FC<React.PropsWithChildren<IPortal>> = ({
   portalId,
   children,
@@ -19,6 +20,7 @@ const Portal: React.FC<React.PropsWithChildren<IPortal>> = ({
   const [portal, setPortal] = useState<HTMLElement | null>(null);
   const id = useId();
 
+  // CREATE/REMOVE IT BEFORE THE SCREEN UPDATES
   useLayoutEffect(() => {
     const containerId = portalId || id;
     let portalElement = document.getElementById(containerId);

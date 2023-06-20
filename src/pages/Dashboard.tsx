@@ -1,6 +1,6 @@
 import { Show, useShows } from '../api/show-api-utils';
 import Card from '../components/Card';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
 import Modal from '../components/Modal';
 import ShowDetails from '../components/show/ShowDetails';
@@ -11,13 +11,13 @@ type CategoryMap = {
 
 const createCategoryMap = (shows: Show[]): CategoryMap => {
   const categoryMap: CategoryMap = {};
-  // Classify shows
+  // CLASSIFY SHOWS BY GENRE
   shows.forEach((show) => {
     show.genres.forEach((genre) => {
       categoryMap[genre] = (categoryMap[genre] || []).concat(show);
     });
   });
-  // Sort shows by popularity within each category
+  // SORT SHOWS BY POPULARITY WITHING EACH CATEGORY
   Object.keys(categoryMap).forEach((category) => {
     categoryMap[category].sort((first, second) => second.weight - first.weight);
   });
@@ -26,16 +26,17 @@ const createCategoryMap = (shows: Show[]): CategoryMap => {
 
 const Dashboard: React.FC = (): JSX.Element => {
   const { data: shows, isError } = useShows();
-  const showsByCategory = createCategoryMap(shows || []);
-
   const { showBoundary } = useErrorBoundary();
   if (isError) showBoundary(null);
+
+  // MEMOIZE THE CREATED CATEGORY MAP
+  const showsByCategory = useMemo(() => createCategoryMap(shows || []), [shows]);
 
   return (
     <div>
       {shows &&
         Object.keys(showsByCategory)
-          .sort()
+          .sort() // SORT CATEGORIES ALPHABETICALLY
           .map((category) => {
             return (
               <section key={category}>
@@ -43,6 +44,7 @@ const Dashboard: React.FC = (): JSX.Element => {
                 <div className="flex overflow-x-auto rounded-lg">
                   {showsByCategory[category].map((show) => {
                     return (
+                      // RENDER A MODAL TRIGGERED BY CLICKING ON A SHOW CARD
                       <div className="flex-shrink-0" key={show.id}>
                         <Modal
                           triggerElement={

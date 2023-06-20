@@ -15,6 +15,7 @@ function getNoOptionsMessage<T>(isError: boolean, isLoading: boolean, options: T
   return isLoadingMessage + isErrorMessage + noResultsMessage;
 }
 
+// A GENERIC SEARCH COMPONENT THAT CAN BE FLEXIBLY REUSED (E.G. src/components/show/ShowSearchResult.tsx)
 const Search = <T extends { id: string | number }>({
   searchFunction,
   optionRenderer,
@@ -31,6 +32,7 @@ const Search = <T extends { id: string | number }>({
   );
   const selectOptions = searchResults || [];
 
+  // SYNC DEBOUNCE ON INPUT CLEARED
   useEffect(() => {
     if (!search) {
       catchUpDebounce();
@@ -41,6 +43,7 @@ const Search = <T extends { id: string | number }>({
     setSearch(e.target.value);
   };
 
+  // CLEAR INPUT ON 'ESCAPE'
   const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     switch (e.key) {
       case 'Escape':
@@ -55,6 +58,10 @@ const Search = <T extends { id: string | number }>({
     if (!event.currentTarget.contains(event.relatedTarget)) {
       setFocused(false);
     } else {
+      // QUICK AND DIRTY, BECAUSE OF THE NATURE OF THE COMPOSITION
+      // AND THE FACT, THAT 'BLUR' EVENT IS FIRED BEFORE THE 'CLICK' EVENT
+      // (POSSIBLE ALTERNATIVE WOULD BE USING 'MOUSEDOWN' INSTEAD OF 'CLICK')
+      // WOULD NOT LET IT INTO PROD, BUT INVEST TIME INTO FINDING BETTER APPROACH
       setTimeout(() => {
         setFocused(false);
       }, 100);
@@ -75,6 +82,7 @@ const Search = <T extends { id: string | number }>({
       onBlur={onBlur}
       onFocus={onFocus}
     >
+      {/* SEARCH INPUT */}
       <input
         value={search}
         onChange={onInputChange}
@@ -82,8 +90,9 @@ const Search = <T extends { id: string | number }>({
         className="border w-full px-2 rounded-md"
       />
       <span className="absolute right-1 top-[2px]">{!isLoading ? '🔍' : '⌛'}</span>
+      {/* SEARCH DROPDOWN */}
       {focused && selectOptions.length ? (
-        <div className="absolute w-full border border-black bg-inherit rounded-md h-[50vh] overflow-y-scroll bg-slate-100">
+        <div className="absolute w-full border border-black bg-inherit rounded-lg h-[50vh] overflow-y-auto bg-slate-100">
           {selectOptions.map((option) => (
             <div className="m-3" key={option.id}>
               {optionRenderer(option)}
